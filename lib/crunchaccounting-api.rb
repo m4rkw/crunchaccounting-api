@@ -355,6 +355,18 @@ class CrunchAPI
     false
   end
 
+  def find_invoice(client_id, date)
+    invoices["salesInvoice"].each do |invoice|
+      if invoice["salesInvoiceDetails"]["client"]["clientId"] == client_id and
+        invoice["salesInvoiceDetails"]["issuedDate"] == date
+
+        return invoice
+      end
+    end
+
+    false
+  end
+
   def issue_invoice(invoice)
     put "/rest/v2/sales_invoices/#{invoice["salesInvoiceId"]}/issue"
   end
