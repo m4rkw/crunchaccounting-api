@@ -17,12 +17,12 @@ Authentication
 
 ````
 crunch = CrunchAPI.new(
-	consumer_key: "consumer_key",
-	consumer_secret: "consumer_secret",
-	auth_endpoint: "https://app.crunch.co.uk",
-	api_endpoint: "https://api.crunch.co.uk",
+  consumer_key: "consumer_key",
+  consumer_secret: "consumer_secret",
+  auth_endpoint: "https://app.crunch.co.uk",
+  api_endpoint: "https://api.crunch.co.uk",
 
-	debug: true  # optional, shows full HTTP requests
+  debug: true  # optional, shows full HTTP requests
 )
 ````
 
@@ -48,7 +48,7 @@ We are now authenticated.  Next time you can pass the oauth token and secret, eg
 ````
 CrunchAPI.new(
   ....
-	oauth_token: "oauth_token",
+  oauth_token: "oauth_token",
   oauth_token_secret: "oauth_token_secret",
 )
 ````
