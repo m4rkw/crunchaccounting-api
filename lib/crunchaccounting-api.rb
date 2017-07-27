@@ -196,7 +196,8 @@ class CrunchAPI
     end
 
     if [
-      "ACCOUNTANCY"
+      "ACCOUNTANCY",
+      "CHILDCARE_VOUCHER_ADMIN_FEES"
     ].include? expense_type
       return true
     end
@@ -209,7 +210,7 @@ class CrunchAPI
 
     if subject_to_vat?(expense_type)
       gross_amount = amount
-      vat_amount = (amount / 100) * @vat_rate 
+      vat_amount = ((amount / 100) * @vat_rate).round(2)
       net_amount = amount - vat_amount
     else
       gross_amount = amount
@@ -448,7 +449,7 @@ class CrunchAPI
     amount = rate * quantity
 
     if add_vat
-      vat = (amount / 100) * @vat_rate
+      vat = ((amount / 100) * @vat_rate).round(2)
       vat_type = "STANDARD"
     else
       vat = 0
