@@ -190,14 +190,17 @@ class CrunchAPI
   def subject_to_vat?(expense_type)
     if [
         "GENERAL_INSURANCE",
-        "MILEAGE_ALLOWANCE"
+        "MILEAGE_ALLOWANCE",
+        "MEDICAL_INSURANCE_CONTRIBUTIONS",
+        "BANK_CHARGES",
       ].include? expense_type
       return false
     end
 
     if [
       "ACCOUNTANCY",
-      "CHILDCARE_VOUCHER_ADMIN_FEES"
+      "CHILDCARE_VOUCHER_ADMIN_FEES",
+      "WEB_HOSTING_CLOUD_SERVICES"
     ].include? expense_type
       return true
     end
@@ -211,7 +214,7 @@ class CrunchAPI
     if subject_to_vat?(expense_type)
       gross_amount = amount
       vat_amount = ((amount / 100) * @vat_rate).round(2)
-      net_amount = amount - vat_amount
+      net_amount = (amount - vat_amount).round(2)
     else
       gross_amount = amount
       vat_amount = 0
