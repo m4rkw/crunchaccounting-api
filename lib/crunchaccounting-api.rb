@@ -193,6 +193,7 @@ class CrunchAPI
         "MILEAGE_ALLOWANCE",
         "MEDICAL_INSURANCE_CONTRIBUTIONS",
         "BANK_CHARGES",
+        "PENSION_SCHEME_CONTRIBUTIONS",
       ].include? expense_type
       return false
     end
@@ -275,6 +276,76 @@ class CrunchAPI
     end
 
     post "/rest/v2/expenses", expense
+  end
+
+  def update_expense(expense_id:, supplier_id:, date:, payment_date:, payment_method: nil, bank_account_id:, amount:, expense_type:, description:, director_id:nil, invoice:nil)
+    !payment_method and payment_method = "EFT"
+
+    if subject_to_vat?(expense_type)
+      gross_amount = amount
+      vat_amount = ((amount / 100) * @vat_rate).round(2)
+      net_amount = (amount - vat_amount).round(2)
+    else
+      gross_amount = amount
+      vat_amount = 0
+      net_amount = amount
+    end
+
+    expense = {
+			"expenseId" => expense_id,
+      "amount" => amount,
+      "expenseDetails" => {
+        "supplier" => {
+          "supplierId" => supplier_id
+        },
+        "postingDate" => date
+      },
+      "paymentDetails" => {
+        "payment" => [{
+          "paymentDate" => payment_date,
+          "paymentMethod" => payment_method,
+          "bankAccount" => {
+            "accountId" => bank_account_id
+          },
+          "amount" => amount
+        }]
+      },
+      "expenseLineItems" => {
+        "count": 1,
+        "lineItemGrossTotal": gross_amount,
+        "expenseLineItems" => [
+          {
+            "expenseType" => expense_type,
+            "benefitingDirector": director_id,
+            "lineItemDescription" => description,
+            "lineItemAmount" => {
+              "currencyCode": "GBP",
+              "netAmount" => net_amount,
+              "grossAmount" => gross_amount,
+              "vatAmount" => vat_amount
+            }
+          }
+        ]
+      }
+    }
+
+    if invoice
+      mimetype = file_mimetype(invoice)
+      filename = invoice.split("/").last
+
+      expense["receipts"] = {
+        "count" => 1,
+        "receipt" => [
+          {
+            "fileName" => filename,
+            "contentType" => mimetype,
+            "fileData": Base64.encode64(File.read(invoice))
+          }
+        ]
+      }
+    end
+
+    put "/rest/v2/expenses", expense
   end
 
   def file_mimetype(filename)
