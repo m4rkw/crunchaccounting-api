@@ -194,6 +194,7 @@ class CrunchAPI
         "MEDICAL_INSURANCE_CONTRIBUTIONS",
         "BANK_CHARGES",
         "PENSION_SCHEME_CONTRIBUTIONS",
+        "PUBLIC_TRANSPORT"
       ].include? expense_type
       return false
     end
