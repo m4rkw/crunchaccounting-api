@@ -260,7 +260,7 @@ class CrunchAPI
       }
     }
 
-    if invoice and invoice != "NONE"
+    if invoice
       mimetype = file_mimetype(invoice)
       filename = invoice.split("/").last
 
