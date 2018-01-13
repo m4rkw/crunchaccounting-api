@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'crunchaccounting-api'
-  s.version     = '1.0.3'
-  s.date        = '2017-09-29'
+  s.version     = '1.0.4'
+  s.date        = '2018-01-13',
   s.summary     = "Crunch Accounting API"
   s.description = "Crunch Accounting API gem"
   s.authors     = ["m4rkw"]
